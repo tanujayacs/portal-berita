@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllNews } from "@/services/api";
 import { NewsItem } from "@/types/news";
-import NewsCard from "./NewsCard";
+import NewsCard from "@/components/NewsCard";
 
 const LatestNewsSection = () => {
   const [latestNews, setLatestNews] = useState<NewsItem[]>([]);

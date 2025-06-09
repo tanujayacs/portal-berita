@@ -1,13 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-
-const categories = ["News", "Technology", "Health", "Lifestyle", "Movie", "Automotive", "Culture"];
+import { getAllNews } from "@/services/api";
+import { NewsItem } from "@/types/news";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [categories, setCategories] = useState<string[]>([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getAllNews();
+        const uniqueCats = Array.from(
+          new Set(
+            data
+              .map((item) => item.kategori.trim().toLowerCase())
+              .filter(Boolean)
+          )
+        );
+        setCategories(uniqueCats);
+      } catch (error) {
+        console.error("Gagal ambil kategori:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleSearch = () => {
     if (search.trim()) {
@@ -24,18 +45,37 @@ const Navbar = () => {
   };
 
   return (
-    <header className="border-b shadow-sm sticky top-0 bg-white z-50 p-4 mx-10">
-      <div className="flex justify-between items-center">
-        <div className="text-2xl font-bold flex items-center gap-2 ml-3">
+    <header className="border-b shadow-sm sticky top-0 bg-white z-50 p-4 md:px-10">
+      {/* Desktop Layout */}
+      <div className="hidden md:grid grid-cols-3 items-center gap-4">
+        {/* Logo kiri */}
+        <div className="flex items-center gap-2">
           <img
             src="/assets/logo.png"
             alt="Logo"
             className="h-6 w-auto cursor-pointer"
             onClick={() => navigate("/")}
           />
+          <span className="text-xl font-bold cursor-pointer" onClick={() => navigate("/")}></span>
         </div>
 
-        <div className="hidden md:flex items-center gap-4 ml-8">
+        {/* Kategori di tengah scrollable */}
+        <div className="overflow-x-auto scrollbar-hide -mx-20">
+          <div className="flex gap-2 w-max px-4"> {/* PERUBAHAN: tambah px-4 di sini */}
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => handleCategoryClick(cat)}
+                className="border rounded-full px-3 py-1 hover:bg-gray-100 whitespace-nowrap"
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Search kanan */}
+        <div className="flex items-center justify-end gap-2">
           <input
             type="text"
             value={search}
@@ -50,16 +90,28 @@ const Navbar = () => {
             Search
           </button>
         </div>
+      </div>
 
-        <div className="md:hidden">
-          <button onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+
+      {/* Mobile View */}
+      <div className="md:hidden flex justify-between items-center">
+        <div className="flex items-center gap-2 ml-3">
+          <img
+            src="/assets/logo.png"
+            alt="Logo"
+            className="h-6 w-auto cursor-pointer"
+            onClick={() => navigate("/")}
+          />
+          <span className="text-lg font-bold">Zentara</span>
         </div>
+
+        <button onClick={() => setIsOpen(!isOpen)} className="mr-2">
+          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </div>
 
       {isOpen && (
-        <div className="flex flex-col md:hidden mt-4 gap-4">
+        <div className="md:hidden flex flex-col mt-4 gap-4">
           <input
             type="text"
             value={search}
@@ -74,7 +126,7 @@ const Navbar = () => {
             Search
           </button>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 max-h-60 overflow-y-auto">
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -87,18 +139,6 @@ const Navbar = () => {
           </div>
         </div>
       )}
-
-      <div className="hidden md:flex flex-wrap justify-center gap-4 mt-4">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => handleCategoryClick(cat)}
-            className="border rounded-full px-3 py-1 hover:bg-gray-100"
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
     </header>
   );
 };

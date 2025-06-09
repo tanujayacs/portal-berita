@@ -1,9 +1,5 @@
-
-// src/services/api.ts
-
 import axios from "axios";
 import { NewsItem } from "@/types/news";
-import { normalizeCategory } from "@/utils/kategoriMapper";
 
 const BASE_URL = "https://winnicode.com/api/publikasi-berita";
 
@@ -14,11 +10,5 @@ export const getAllNews = async (): Promise<NewsItem[]> => {
     },
   });
 
-  // Normalisasi kategori setelah fetch
-  const data = response.data.map((item) => ({
-    ...item,
-    kategori: normalizeCategory(item.kategori),
-  }));
-
-  return data;
+  return response.data;
 };

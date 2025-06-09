@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { NewsItem } from "@/types/news";
 import { getAllNews } from "@/services/api";
@@ -6,6 +7,7 @@ import Navbar from "@/components/Navbar";
 
 const DetailPage = () => {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [news, setNews] = useState<NewsItem | null>(null);
   const [related, setRelated] = useState<NewsItem[]>([]);
 
@@ -15,6 +17,11 @@ const DetailPage = () => {
       const selected = all.find((n) => n.slug === slug);
       setNews(selected || null);
       setRelated(all.filter((n) => n.penulis === selected?.penulis && n.slug !== slug));
+      if (!selected) {
+        navigate("/404"); // ⬅️ Redirect jika tidak ditemukan
+        return;
+      }
+      setNews(selected);
     };
 
     fetchNews();

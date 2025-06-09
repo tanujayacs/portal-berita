@@ -3,9 +3,14 @@ import { getAllNews } from "@/services/api";
 import { NewsItem } from "@/types/news";
 import NewsCard from "@/components/NewsCard";
 import Navbar from "@/components/Navbar";
-import LatestNewsSection from "@/components/LatestNewsSection";
-import LifestyleSection from "@/components/LifestyleSection";
-import CultureSection from "@/components/CultureSection";
+import LatestNewsSection from "@/components/section/LatestNewsSection";
+// import AutomotiveSection from "@/components/section/AutomotiveSection";
+// // import BusinessSection from "@/components/section/BusinessSection";
+// import EntertainmentSection from "@/components/section/EntertainmentSection";
+// import FoodSection from "@/components/section/FoodSection";
+// import HealthSection from "@/components/section/HealthSection";
+// import PoliticsSection from "@/components/section/PoliticsSection";
+// import SportSection from "@/components/section/SportSection";
 
 const Home = () => {
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
@@ -39,8 +44,8 @@ const Home = () => {
     <div>
       <Navbar />
       <LatestNewsSection />
-      <LifestyleSection />
-      <CultureSection />
+      {/* <AutomotiveSection />
+      <EntertainmentSection /> */}
       <div className="max-w-6xl mx-auto p-4 grid grid-cols-1 md:grid-cols-4 gap-6">
         {newsList.map((news) => (
           <NewsCard key={news.id} news={news} />

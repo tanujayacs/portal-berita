@@ -3,6 +3,7 @@ import Home from "@/pages/Home";
 import DetailPage from "@/pages/DetailPage";
 import KategoriPage from "@/pages/KategoriPage";
 import SearchResultPage from "@/pages/SearchResultPage";
+import NotFound from "@/pages/NotFound";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/berita/:slug" element={<DetailPage />} />
         <Route path="/kategori/:kategori" element={<KategoriPage />} />
         <Route path="/search" element={<SearchResultPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

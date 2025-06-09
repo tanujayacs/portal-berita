@@ -17,8 +17,9 @@ const SearchResultPage = () => {
         const allNews = await getAllNews();
         const filtered = allNews.filter(
           (news) =>
-            news.judul.toLowerCase().includes(query) ||
-            news.deskripsi.toLowerCase().includes(query)
+            news.judul.toLowerCase().includes(query) //keyword yang dicari hanya judul saja
+          // ||
+          //   news.kategori.toLowerCase().includes(query) 
         );
         setFilteredNews(filtered);
       } catch (err) {

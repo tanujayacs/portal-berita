@@ -8,6 +8,7 @@ const config: Config = {
     extend: {},
   },
   plugins: [lineClamp],
+  
 };
 
 export default config;
