@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { getAllNews } from "@/services/api";
 import { NewsItem } from "@/types/news";
 
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
