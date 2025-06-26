@@ -136,8 +136,7 @@ No license information is specified in the repository. All rights are reserved b
 
 ## Contact/Support Information
 
-For questions or support, please contact:
+Feel free to reach out for support or collaboration:
 
-[Author's Name or Organization]
-
-[Email Address or Website URL]
+Email: tanujayacs@gmail.com
+GitHub: Your GitHub Profile
