@@ -1,35 +1,40 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { useNavigate, useLocation} from "react-router-dom";
+import { Menu, X, Bookmark } from "lucide-react";
 import { getAllNews } from "@/services/api";
 import { NewsItem } from "@/types/news";
-
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const data = await getAllNews();
         const uniqueCats = Array.from(
-          new Set(
-            data
-              .map((item) => item.kategori.trim().toLowerCase())
-              .filter(Boolean)
-          )
+          new Set(data.map((item) => item.kategori.trim().toLowerCase()).filter(Boolean))
         );
         setCategories(uniqueCats);
       } catch (error) {
         console.error("Gagal ambil kategori:", error);
       }
     };
-
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    const match = location.pathname.match(/\/kategori\/(.+)/);
+    if (match) {
+      setActiveCategory(match[1]);
+    } else {
+      setActiveCategory(null);
+    }
+  }, [location.pathname]);
 
   const handleSearch = () => {
     if (search.trim()) {
@@ -40,16 +45,15 @@ const Navbar = () => {
   };
 
   const handleCategoryClick = (cat: string) => {
-    const slug = cat.toLowerCase();
-    navigate(`/kategori/${slug}`);
+    navigate(`/kategori/${cat.toLowerCase()}`);
     setIsOpen(false);
   };
 
   return (
     <header className="border-b shadow-sm sticky top-0 bg-white z-50 p-4 md:px-10">
       {/* Desktop Layout */}
-      <div className="hidden md:grid grid-cols-3 items-center gap-4">
-        {/* Logo kiri */}
+      <div className="hidden md:flex items-center justify-between px-6">
+        {/* Left: Logo */}
         <div className="flex items-center gap-2">
           <img
             src="/assets/logo.png"
@@ -57,26 +61,31 @@ const Navbar = () => {
             className="h-6 w-auto cursor-pointer"
             onClick={() => navigate("/")}
           />
-          <span className="text-xl font-bold cursor-pointer" onClick={() => navigate("/")}></span>
         </div>
 
-        {/* Kategori di tengah scrollable */}
-        <div className="overflow-x-auto scrollbar-hide -mx-20">
-          <div className="flex gap-2 w-max px-4"> {/* PERUBAHAN: tambah px-4 di sini */}
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => handleCategoryClick(cat)}
-                className="border rounded-full px-3 py-1 hover:bg-gray-100 whitespace-nowrap"
-              >
-                {cat}
-              </button>
-            ))}
+        {/* Center: Scrollable Categories */}
+        <div className="flex-1 mx-6 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-2 w-max">
+            {categories.map((cat) => {
+              const slug = cat.toLowerCase();
+              const isActive = activeCategory === slug;
+
+              return (
+                <button
+                  key={cat}
+                  onClick={() => handleCategoryClick(cat)}
+                  className={`border rounded-full px-4 py-1 whitespace-nowrap capitalize transition
+                    ${isActive ? "bg-blue-600 text-white border-blue-600" : "hover:bg-gray-100"}`}
+                >
+                  {cat}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Search kanan */}
-        <div className="flex items-center justify-end gap-2">
+        {/* Right: Search + Bookmark */}
+        <div className="flex items-center gap-2">
           <input
             type="text"
             value={search}
@@ -90,11 +99,18 @@ const Navbar = () => {
           >
             Search
           </button>
+          <button
+            onClick={() => navigate("/bookmark")}
+            className="ml-2 text-gray-600 hover:text-blue-600"
+            title="Lihat Bookmark"
+          >
+            <Bookmark className="w-5 h-5" />
+          </button>
         </div>
       </div>
 
 
-      {/* Mobile View */}
+      {/* Mobile Layout */}
       <div className="md:hidden flex justify-between items-center">
         <div className="flex items-center gap-2 ml-3">
           <img
@@ -103,9 +119,8 @@ const Navbar = () => {
             className="h-6 w-auto cursor-pointer"
             onClick={() => navigate("/")}
           />
-          <span className="text-lg font-bold">Zentara</span>
+          <span className="text-lg font-bold"></span>
         </div>
-
         <button onClick={() => setIsOpen(!isOpen)} className="mr-2">
           {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
@@ -132,11 +147,20 @@ const Navbar = () => {
               <button
                 key={cat}
                 onClick={() => handleCategoryClick(cat)}
-                className="border rounded-full px-3 py-1 hover:bg-gray-100 w-full text-left"
+                className="border rounded-full px-3 py-1 hover:bg-gray-100 w-full text-left capitalize"
               >
                 {cat}
               </button>
             ))}
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                navigate("/bookmark");
+              }}
+              className="border rounded-full px-3 py-1 text-left hover:bg-gray-100"
+            >
+              🔖 Lihat Bookmark
+            </button>
           </div>
         </div>
       )}
