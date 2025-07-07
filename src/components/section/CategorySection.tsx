@@ -25,13 +25,10 @@ const CategorySectionSkeleton = () => (
 const CategorySection = ({ title, kategori, highlightFirst = true }: Props) => {
   const navigate = useNavigate();
 
-  // 1. Ganti useEffect + useState dengan useQuery
   const { data: newsList, isLoading, isError } = useQuery<NewsItem[]>({
-    // 2. Gunakan queryKey yang sama ('allNews') agar data hanya di-fetch sekali
-    // dan digunakan bersama oleh semua CategorySection.
     queryKey: ['allNews'],
     queryFn: getAllNews,
-    // 3. Logika filter dan sort pindah ke `select`.
+
     select: (allNews) =>
       allNews
         .filter((item) => item.kategori.toLowerCase() === kategori.toLowerCase())

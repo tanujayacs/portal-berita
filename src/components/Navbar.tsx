@@ -11,7 +11,6 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Gunakan useQuery untuk fetch dan cache kategori
   const { data: categories = [] } = useQuery<string[]>({
     queryKey: ['categories'],
     queryFn: async () => {
@@ -21,7 +20,7 @@ const Navbar = () => {
       );
       return uniqueCats;
     },
-    staleTime: 1000 * 60 * 60 * 24 // Cache kategori selama 24 jam
+    staleTime: 1000 * 60 * 60 * 24
   });
 
   useEffect(() => {

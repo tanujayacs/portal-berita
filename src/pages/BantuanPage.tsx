@@ -1,5 +1,8 @@
+import ZentaraLayout from "@/layout/ZentaraLayout";
+
 const BantuanPage = () => {
   return (
+    <ZentaraLayout>
     <div className="max-w-4xl mx-auto py-10 px-4">
       <h1 className="text-2xl font-bold mb-6">Bantuan</h1>
       <p className="mb-4">
@@ -35,6 +38,7 @@ const BantuanPage = () => {
         <a href="/kebijakan-privasi" className="text-blue-600 underline ml-1">Kebijakan Privasi</a>.
       </p>
     </div>
+    </ZentaraLayout>
   );
 };
 

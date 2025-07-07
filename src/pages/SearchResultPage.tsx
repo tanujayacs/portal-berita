@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { NewsItem } from "@/types/news";
 import { getAllNews } from "@/services/api";
 import NewsCard from "@/components/NewsCard";
-import Navbar from "@/components/Navbar";
+import ZentaraLayout from "@/layout/ZentaraLayout";
 
 const SearchResultPage = () => {
   const location = useLocation();
@@ -20,14 +20,12 @@ const SearchResultPage = () => {
   });
 
   return (
-    <div>
-      <Navbar />
-      {/* FIX: Hapus 'max-w-6xl mx-auto' dan gunakan padding yang konsisten */}
+    <ZentaraLayout>
       <div className="px-4 sm:px-6 lg:px-8 py-6">
         <h1 className="text-2xl font-bold mb-4">
           Hasil Pencarian untuk: <span className="text-blue-600">"{query}"</span>
         </h1>
-        
+
         {isLoading ? (
           <p className="text-center">Mencari...</p>
         ) : isError ? (
@@ -42,7 +40,7 @@ const SearchResultPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </ZentaraLayout>
   );
 };
 

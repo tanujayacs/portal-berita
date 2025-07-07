@@ -1,4 +1,3 @@
-// src/components/HeroSlider.tsx
 import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -72,14 +71,13 @@ const HeroSlider = () => {
 
                   <div className="relative h-full flex flex-col justify-end p-8 md:p-12 text-white">
                     <div className="max-w-3xl">
-                      <p className="text-sm font-semibold uppercase tracking-wider text-primary-foreground/80 mb-2 capitalize">
-                        {news.kategori}
-                      </p>
+                      
                       <h1 className="text-3xl md:text-5xl font-bold leading-tight drop-shadow-lg hover:text-primary-foreground/90 transition-colors">
                         {news.judul}
                       </h1>
                       <p className="mt-4 text-base text-gray-200 drop-shadow-md">
-                        Oleh <span className="font-semibold">{news.penulis}</span>
+                        <span className="font-semibold">{news.kategori } •  
+                          </span> Oleh <span className="font-semibold">{news.penulis}</span>
                       </p>
                     </div>
                   </div>

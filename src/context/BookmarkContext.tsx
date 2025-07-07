@@ -11,7 +11,6 @@ interface BookmarkContextType {
 
 const BookmarkContext = createContext<BookmarkContextType | undefined>(undefined);
 
-// ✅ Fungsi untuk bersihkan data sebelum disimpan
 const cleanNews = (news: NewsItem): NewsItem => {
   return {
     id: news.id,
@@ -33,7 +32,6 @@ const cleanNews = (news: NewsItem): NewsItem => {
 export const BookmarkProvider = ({ children }: { children: React.ReactNode }) => {
   const [bookmarks, setBookmarks] = useState<NewsItem[]>([]);
 
-  // 🔁 Ambil data dari localStorage saat pertama kali render
   useEffect(() => {
     const stored = localStorage.getItem(LOCAL_KEY);
     if (stored) {
@@ -47,10 +45,8 @@ export const BookmarkProvider = ({ children }: { children: React.ReactNode }) =>
     }
   }, []);
 
-  // ✅ Bookmark checker
   const isBookmarked = (id: string) => bookmarks.some((item) => item.id === id);
 
-  // ❤️ Toggle bookmark
   const toggleBookmark = (news: NewsItem) => {
     const cleaned = cleanNews(news);
     const updated = isBookmarked(news.id)

@@ -3,7 +3,6 @@ import { getAllNews } from "@/services/api";
 import NewsCard from "@/components/NewsCard";
 import { NewsItem } from "@/types/news";
 
-// Komponen untuk UI loading (Skeleton)
 const LatestNewsSkeleton = () => (
   <div className="grid md:grid-cols-3 gap-6">
     {Array.from({ length: 4 }).map((_, index) => (
@@ -19,8 +18,6 @@ const LatestNewsSkeleton = () => (
 );
 
 const LatestNewsSection = () => {
-  // 1. Ganti useEffect + useState dengan satu hook useQuery.
-  // 2. Logika sorting dan slicing dipindahkan ke opsi `select` agar lebih efisien.
   const { data: latestNews, isLoading, isError } = useQuery<NewsItem[]>({
     queryKey: ['latestNews'], // Kunci unik untuk query ini
     queryFn: getAllNews,
@@ -40,7 +37,6 @@ const LatestNewsSection = () => {
         <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">UP TO DATE</span>
       </div>
 
-      {/* 3. Tambahkan kondisi untuk loading dan error state */}
       {isLoading && <LatestNewsSkeleton />}
       {isError && <p className="text-red-500 text-center">Gagal memuat berita terbaru.</p>}
 

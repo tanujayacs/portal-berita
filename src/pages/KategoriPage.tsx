@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllNews } from "@/services/api";
 import { NewsItem } from "@/types/news";
 import NewsCard from "@/components/NewsCard";
-import Navbar from "@/components/Navbar";
+import ZentaraLayout from "@/layout/ZentaraLayout";
 
 const KategoriPage = () => {
   const { kategori = "" } = useParams<{ kategori: string }>();
@@ -16,9 +16,7 @@ const KategoriPage = () => {
   });
 
   return (
-    <div>
-      <Navbar />
-      {/* FIX: Hapus 'max-w-6xl mx-auto' dan gunakan padding yang konsisten */}
+    <ZentaraLayout>
       <div className="px-4 sm:px-6 lg:px-8 py-6">
         <h1 className="text-3xl font-bold mb-6 capitalize text-center">
           Kategori: {kategori}
@@ -38,7 +36,7 @@ const KategoriPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </ZentaraLayout>
   );
 };
 
