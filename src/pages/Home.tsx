@@ -34,10 +34,10 @@ const Home = () => {
 
     fetchNews();
   }, []);
-
-  console.log("✅ Berita yang di-bookmark:", bookmarks);
+  <ZentaraLayout>
 
   if (loading) return <p className="text-center mt-10">Loading berita...</p>;
+  </ZentaraLayout>
 
   return (
     <ZentaraLayout>

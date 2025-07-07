@@ -8,6 +8,64 @@ import NewsCard from "@/components/NewsCard";
 import { getOptimizedDriveThumbnail } from "@/lib/utils";
 import { getTopKRecommendations } from "@/utils/tfidf";
 
+// Skeleton Loader untuk DetailPage
+const DetailPageSkeleton = () => (
+  <ZentaraLayout>
+    <div className="animate-pulse">
+      {/* Skeleton untuk header */}
+      <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 py-8 text-center">
+        <div className="h-10 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
+        <div className="flex justify-center space-x-4">
+          <div className="h-4 bg-gray-200 rounded w-24"></div>
+          <div className="h-4 bg-gray-200 rounded w-32"></div>
+        </div>
+      </div>
+
+      {/* Skeleton untuk gambar utama */}
+      <div className="w-full h-64 md:h-96 bg-gray-200"></div>
+
+      <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+          {/* Konten utama */}
+          <div className="lg:col-span-8 space-y-4">
+            {[...Array(10)].map((_, i) => (
+              <div key={i} className="h-4 bg-gray-200 rounded w-full"></div>
+            ))}
+            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+          </div>
+
+          {/* Sidebar artikel penulis */}
+          <div className="lg:col-span-4 space-y-4">
+            <div className="h-6 bg-gray-200 rounded w-1/2 mb-4"></div>
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="border rounded-md p-3">
+                <div className="h-32 bg-gray-200 rounded mb-3"></div>
+                <div className="h-4 bg-gray-200 rounded w-full"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Rekomendasi berita */}
+        <div className="mt-12">
+          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="border rounded-lg overflow-hidden">
+                <div className="h-48 bg-gray-200"></div>
+                <div className="p-4">
+                  <div className="h-5 bg-gray-200 rounded w-full mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </ZentaraLayout>
+);
+
 const DetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const [recommendedNews, setRecommendedNews] = useState<NewsItem[]>([]);
@@ -30,14 +88,7 @@ const DetailPage = () => {
   }, [news, allNews]);
 
   if (loadingAll) {
-    return (
-      <>
-        <ZentaraLayout>
-
-          <div className="text-center mt-10">Memuat berita...</div>
-        </ZentaraLayout>
-      </>
-    );
+    return <DetailPageSkeleton />;
   }
 
   if (!news) {
@@ -98,7 +149,7 @@ const DetailPage = () => {
                   >
                     {item.gambar && (
                       <img
-                        src={getOptimizedDriveThumbnail(news.gambar)}
+                        src={getOptimizedDriveThumbnail(item.gambar)}
                         className="w-full h-32 object-cover"
                         alt={item.judul}
                       />

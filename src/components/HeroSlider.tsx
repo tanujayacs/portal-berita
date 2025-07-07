@@ -69,7 +69,7 @@ const HeroSlider = () => {
                   />
                   <div className="absolute inset-0 bg-black/40" />
 
-                  <div className="relative h-full flex flex-col justify-end p-8 md:p-12 text-white">
+                  <div className="relative h-full flex flex-col justify-end ml-8 p-8 md:p-12 text-white">
                     <div className="max-w-3xl">
                       
                       <h1 className="text-3xl md:text-5xl font-bold leading-tight drop-shadow-lg hover:text-primary-foreground/90 transition-colors">
