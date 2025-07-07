@@ -2,6 +2,7 @@ import { NewsItem } from "@/types/news";
 import { Link } from "react-router-dom";
 import { Heart, HeartOff } from "lucide-react";
 import { useBookmark } from "@/context/BookmarkContext";
+import { getOptimizedDriveThumbnail } from "@/lib/utils";
 
 interface NewsCardProps {
   news: NewsItem;
@@ -17,7 +18,7 @@ const NewsCard = ({ news }: NewsCardProps) => {
           <div className="relative">
             {news.gambar && (
               <img
-                src={`https://drive.google.com/thumbnail?id=${news.gambar}`}
+                src={getOptimizedDriveThumbnail(news.gambar)}
                 alt={news.judul}
                 className="w-full h-60 object-cover"
               />

@@ -1,31 +1,28 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query"; // Import
 import { Menu, X, Bookmark } from "lucide-react";
 import { getAllNews } from "@/services/api";
-import { NewsItem } from "@/types/news";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [categories, setCategories] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await getAllNews();
-        const uniqueCats = Array.from(
-          new Set(data.map((item) => item.kategori.trim().toLowerCase()).filter(Boolean))
-        );
-        setCategories(uniqueCats);
-      } catch (error) {
-        console.error("Gagal ambil kategori:", error);
-      }
-    };
-    fetchCategories();
-  }, []);
+  // Gunakan useQuery untuk fetch dan cache kategori
+  const { data: categories = [] } = useQuery<string[]>({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const data = await getAllNews();
+      const uniqueCats = Array.from(
+        new Set(data.map((item) => item.kategori.trim().toLowerCase()).filter(Boolean))
+      );
+      return uniqueCats;
+    },
+    staleTime: 1000 * 60 * 60 * 24 // Cache kategori selama 24 jam
+  });
 
   useEffect(() => {
     const match = location.pathname.match(/\/kategori\/(.+)/);
@@ -63,9 +60,9 @@ const Navbar = () => {
           />
         </div>
 
-        {/* Center: Scrollable Categories */}
-        <div className="flex-1 mx-6 overflow-x-auto scrollbar-hide">
-          <div className="flex gap-2 w-max">
+        {/* Center: Scrollable Categories (PERUBAHAN DI SINI) */}
+        <div className="flex-1 mx-32 overflow-x-auto scrollbar-thin">
+          <div className="flex mb-1 gap-1 w-max text-sm">
             {categories.map((cat) => {
               const slug = cat.toLowerCase();
               const isActive = activeCategory === slug;
@@ -75,7 +72,7 @@ const Navbar = () => {
                   key={cat}
                   onClick={() => handleCategoryClick(cat)}
                   className={`border rounded-full px-4 py-1 whitespace-nowrap capitalize transition
-                    ${isActive ? "bg-blue-600 text-white border-blue-600" : "hover:bg-gray-100"}`}
+                  ${isActive ? "bg-blue-600 text-white border-blue-600" : "hover:bg-gray-100"}`}
                 >
                   {cat}
                 </button>
@@ -108,7 +105,7 @@ const Navbar = () => {
           </button>
         </div>
       </div>
-
+      {/* Desktop Layout */}
 
       {/* Mobile Layout */}
       <div className="md:hidden flex justify-between items-center">
