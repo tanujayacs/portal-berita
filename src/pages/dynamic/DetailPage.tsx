@@ -13,7 +13,6 @@ const DetailPageSkeleton = () => (
   <ZentaraLayout>
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <div className="animate-pulse">
-        {/* Skeleton untuk header */}
         <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 py-8 text-center">
           <div className="h-10 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
           <div className="flex justify-center space-x-4">
@@ -22,12 +21,11 @@ const DetailPageSkeleton = () => (
           </div>
         </div>
 
-        {/* Skeleton untuk gambar utama */}
         <div className="w-full h-64 md:h-96 bg-gray-200"></div>
 
         <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-            {/* Konten utama */}
+            {/* Content */}
             <div className="lg:col-span-8 space-y-4">
               {[...Array(100)].map((_, i) => (
                 <div key={i} className="h-4 bg-gray-200 rounded w-full"></div>
@@ -35,7 +33,7 @@ const DetailPageSkeleton = () => (
               <div className="h-4 bg-gray-200 rounded w-3/4"></div>
             </div>
 
-            {/* Sidebar artikel penulis */}
+            {/* Writer Sidebar */}
             <div className="lg:col-span-4 space-y-4">
               <div className="h-6 bg-gray-200 rounded w-1/2 mb-4"></div>
               {[...Array(3)].map((_, i) => (
@@ -47,7 +45,7 @@ const DetailPageSkeleton = () => (
             </div>
           </div>
 
-          {/* Rekomendasi berita */}
+          {/* News Reccomendation */}
           <div className="mt-12">
             <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

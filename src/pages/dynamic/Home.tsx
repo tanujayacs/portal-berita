@@ -26,7 +26,6 @@ const Home = () => {
 
   if (loading) return <p className="text-center mt-10">Loading berita...</p>;
 
-  // 🧠 Proses data: kelompokkan berdasarkan kategori
   const categorizedMap: Record<string, NewsItem[]> = {};
   newsList.forEach((item) => {
     const key = item.kategori.toLowerCase();
@@ -36,7 +35,6 @@ const Home = () => {
     categorizedMap[key].push(item);
   });
 
-  // 🔍 Filter kategori yang punya ≥3 berita dan ambil 4 kategori pertama
   const eligibleCategories = Object.entries(categorizedMap)
     .filter(([_, items]) => items.length >= 3)
     .slice(0, 4); // maksimum 4 section

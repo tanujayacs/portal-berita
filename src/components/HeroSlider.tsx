@@ -91,19 +91,16 @@ const HeroSlider = () => {
             <CarouselItem key={news.id}>
               <Link to={`/berita/${news.slug}`} className="block">
                 <div className="relative w-full h-[600px] overflow-hidden">
-                  {/* Enhanced image with overlay effects */}
                   <div className="absolute inset-0">
                     <img
                       src={getOptimizedDriveThumbnail(news.gambar)}
                       alt={news.judul}
                       className="w-full h-full object-cover transition-transform duration-[8s] ease-out hover:scale-110"
                     />
-                    {/* Multi-layer overlay for better text readability */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/20" />
                   </div>
 
-                  {/* Enhanced content section */}
                   <div className="relative h-full flex flex-col justify-end p-8 md:p-12 text-white">
                     <div className="max-w-4xl space-y-6">
                       {/* Category badge */}
@@ -116,12 +113,10 @@ const HeroSlider = () => {
                         <div className="h-1 w-12 bg-white/30 rounded-full"></div>
                       </div>
 
-                      {/* Enhanced title */}
                       <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight drop-shadow-2xl hover:text-blue-200 transition-colors duration-300">
                         {news.judul}
                       </h1>
 
-                      {/* Enhanced author info */}
                       <div className="flex items-center gap-4 text-base">
                         <div className="flex items-center gap-2">
                           <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
@@ -145,7 +140,6 @@ const HeroSlider = () => {
         </CarouselContent>
       </Carousel>
 
-      {/* Enhanced Navigation Controls */}
       <div className="absolute left-6 top-1/2 -translate-y-1/2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <Button
           variant="outline"
@@ -168,10 +162,8 @@ const HeroSlider = () => {
         </Button>
       </div>
 
-      {/* Enhanced slide indicators */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
         <div className="flex items-center gap-4 bg-black/20 backdrop-blur-sm rounded-full px-6 py-3">
-          {/* Slide dots */}
           <div className="flex gap-2">
             {Array.from({ length: count }).map((_, index) => (
               <button
@@ -208,7 +200,7 @@ const HeroSlider = () => {
       </div>
 
       {/* Progress bar */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+      <div className="absolute bottom-0 left-3 right-3 h-1 bg-white/20">
         <div 
           className="h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300"
           style={{ width: `${((current - 1) / (count - 1)) * 100}%` }}

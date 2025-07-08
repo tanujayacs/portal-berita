@@ -16,16 +16,9 @@ const KategoriPage = () => {
       allNews.filter((item) => item.kategori.toLowerCase() === kategori.toLowerCase())
   });
 
-  // Get category color based on category name
   const getCategoryColor = (category: string) => {
     const colors = {
-      'teknologi': 'from-blue-600 to-cyan-600',
-      'politik': 'from-red-600 to-pink-600',
-      'olahraga': 'from-green-600 to-emerald-600',
-      'ekonomi': 'from-yellow-600 to-orange-600',
-      'hiburan': 'from-purple-600 to-indigo-600',
-      'kesehatan': 'from-teal-600 to-green-600',
-      'default': 'from-gray-600 to-slate-600'
+      'default': 'from-blue-600 to-purple-600'
     };
     return colors[category.toLowerCase() as keyof typeof colors] || colors.default;
   };

@@ -25,7 +25,7 @@ const config: Config = {
           '4': "hsl(var(--chart-4))",
           '5': "hsl(var(--chart-5))",
         },
-        // Kalau kamu mau tambahin lagi: card, primary, dsb, tambahin di sini
+        
       },
     },
   },

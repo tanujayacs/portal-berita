@@ -11,7 +11,6 @@ interface Props {
   highlightFirst?: boolean;
 }
 
-// Enhanced Skeleton with better visual hierarchy
 const CategorySectionSkeleton = () => (
   <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 animate-pulse">
     <div className="lg:col-span-3 space-y-4">
@@ -49,7 +48,6 @@ const CategorySection = ({ title, kategori, highlightFirst = true }: Props) => {
 
   return (
     <section className="my-16 px-6 md:px-20">
-      {/* Enhanced Header with gradient accent */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
         <div className="space-y-2">
           <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
@@ -75,7 +73,6 @@ const CategorySection = ({ title, kategori, highlightFirst = true }: Props) => {
 
       {!isLoading && !isError && newsList && newsList.length > 0 && (
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* Enhanced Featured Article */}
           {highlightFirst && featured && (
             <div className="lg:col-span-3">
               <Link 
@@ -90,7 +87,6 @@ const CategorySection = ({ title, kategori, highlightFirst = true }: Props) => {
                 ></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                 
-                {/* Featured Badge */}
                 <div className="absolute top-6 left-6 z-10">
                   <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                     ⭐ Featured
@@ -119,7 +115,6 @@ const CategorySection = ({ title, kategori, highlightFirst = true }: Props) => {
             </div>
           )}
 
-          {/* Enhanced Side Articles */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
               <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">

@@ -23,7 +23,6 @@ const NewsCard = ({ news }: NewsCardProps) => {
                 className="w-full h-60 object-cover transition-transform duration-500 ease-out group-hover:scale-110"
               />
             )}
-            {/* Gradient overlay for better text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
             
             <span className="absolute top-3 left-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg backdrop-blur-sm transform transition-all duration-500 ease-out group-hover:scale-105 group-hover:shadow-xl">
