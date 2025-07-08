@@ -88,10 +88,10 @@ const LatestNewsSection = () => {
           </div>
         </div>
       )}
-
+{/* 
       <div className="flex justify-center mt-16">
         <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent w-64"></div>
-      </div>
+      </div> */}
     </section>
   );
 };
