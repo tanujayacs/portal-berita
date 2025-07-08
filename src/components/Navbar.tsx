@@ -63,7 +63,7 @@ const Navbar = () => {
             onClick={() => navigate("/")}
           >
             <img
-              src="/assets/zentara.png"
+              src="/zentara.png"
               alt="Zentara Logo"
               className="w-8 h-8 object-cover rounded-lg cursor-pointer group-hover:scale-105 transition-transform duration-200"
             />
