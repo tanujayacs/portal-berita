@@ -8,7 +8,6 @@ import NewsCard from "@/components/NewsCard";
 import { getOptimizedDriveThumbnail } from "@/lib/utils";
 import { getTopKRecommendations } from "@/utils/tfidf";
 
-// Skeleton Loader untuk DetailPage
 const DetailPageSkeleton = () => (
   <ZentaraLayout>
     <div className="animate-pulse">
@@ -28,7 +27,7 @@ const DetailPageSkeleton = () => (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Konten utama */}
           <div className="lg:col-span-8 space-y-4">
-            {[...Array(10)].map((_, i) => (
+            {[...Array(100)].map((_, i) => (
               <div key={i} className="h-4 bg-gray-200 rounded w-full"></div>
             ))}
             <div className="h-4 bg-gray-200 rounded w-3/4"></div>
@@ -170,14 +169,16 @@ const DetailPage = () => {
           </div>
 
           {/* Rekomendasi Berita Berbasis Konten */}
-          <div className="mt-12">
-            <h2 className="text-2xl font-semibold mb-4">Rekomendasi Berita untuk Anda</h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {recommendedNews.map(item => (
-                <NewsCard key={item.id} news={item} />
-              ))}
+          {recommendedNews.length > 0 && (
+            <div className="mt-12">
+              <h2 className="text-2xl font-semibold mb-4">Rekomendasi Berita untuk Anda</h2>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {recommendedNews.map(item => (
+                  <NewsCard key={item.id} news={item} />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </ZentaraLayout>

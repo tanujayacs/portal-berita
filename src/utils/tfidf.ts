@@ -91,5 +91,6 @@ export function getTopKRecommendations(
   return scores
     .filter((_, i) => i !== inputIndex)
     .sort((a, b) => b.similarity - a.similarity)
+    .filter(item => item.similarity >= 0.4) // kamu bisa adjust threshold ini
     .slice(0, topK);
 }
