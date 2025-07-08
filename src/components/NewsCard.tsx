@@ -1,6 +1,6 @@
 import { NewsItem } from "@/types/news";
 import { Link } from "react-router-dom";
-import { Heart, HeartOff } from "lucide-react";
+import { Bookmark } from "lucide-react";
 import { useBookmark } from "@/context/BookmarkContext";
 import { getOptimizedDriveThumbnail } from "@/lib/utils";
 
@@ -49,11 +49,13 @@ const NewsCard = ({ news }: NewsCardProps) => {
         }}
         className="absolute top-3 right-3 z-20 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg transition-all duration-300 hover:bg-white hover:scale-110 active:scale-95"
       >
-        {isBookmarked(news.id) ? (
-          <Heart className="text-red-500 w-5 h-5 fill-red-500 transition-all duration-300" />
-        ) : (
-          <HeartOff className="text-gray-400 w-5 h-5 transition-all duration-300 hover:text-red-400" />
-        )}
+        <Bookmark 
+          className={`w-5 h-5 transition-all duration-300 ${
+            isBookmarked(news.id) 
+              ? 'text-blue-600 fill-blue-600' 
+              : 'text-gray-400 hover:text-blue-600'
+          }`} 
+        />
       </button>
     </div>
   );

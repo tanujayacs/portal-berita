@@ -1,43 +1,108 @@
 import ZentaraLayout from "@/layout/ZentaraLayout";
+import { 
+  Home, 
+  Search, 
+  Bookmark, 
+  Share2, 
+  Users, 
+  Shield, 
+  LifeBuoy,
+  ArrowRight 
+} from "lucide-react";
 
 const BantuanPage = () => {
+  const navigationItems = [
+    { icon: Home, title: "Beranda", desc: "Temukan berita terbaru dan unggulan dari berbagai kategori." },
+    { icon: Search, title: "Cari", desc: "Gunakan fitur pencarian untuk menemukan berita sesuai kata kunci." },
+    { icon: Bookmark, title: "Bookmark", desc: "Simpan berita favorit Anda untuk dibaca kembali nanti." },
+  ];
+
+  const features = [
+    { icon: Share2, title: "Berbagi Artikel", desc: "Gunakan tombol share untuk membagikan berita ke sosial media Anda." },
+    { icon: LifeBuoy, title: "Laporan", desc: "Temukan bug atau konten tidak pantas? Silakan hubungi kami melalui formulir kontak." },
+    { icon: Users, title: "Newsletter", desc: "Berlangganan untuk update berita langsung ke email Anda." },
+  ];
+
   return (
     <ZentaraLayout>
-    <div className="max-w-4xl mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold mb-6">Bantuan</h1>
-      <p className="mb-4">
-        Selamat datang di halaman Bantuan Zentara! Kami ingin memastikan bahwa pengalaman Anda
-        menjelajahi situs kami tetap nyaman dan efisien. Berikut beberapa panduan umum:
-      </p>
+      <div className="max-w-6xl mx-auto py-12 px-4">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+            <LifeBuoy className="w-8 h-8 text-green-600" />
+          </div>
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">Bantuan</h1>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Selamat datang di halaman Bantuan Zentara! Kami ingin memastikan bahwa pengalaman Anda
+            menjelajahi situs kami tetap nyaman dan efisien.
+          </p>
+        </div>
 
-      <h2 className="text-xl font-semibold mt-6 mb-2">Navigasi Situs</h2>
-      <ul className="list-disc list-inside mb-4">
-        <li><strong>Beranda:</strong> Temukan berita terbaru dan unggulan dari berbagai kategori.</li>
-        <li><strong>Kategori:</strong> Jelajahi berita berdasarkan tema seperti politik, kesehatan, dan teknologi.</li>
-        <li><strong>Cari:</strong> Gunakan fitur pencarian untuk menemukan berita sesuai kata kunci.</li>
-        <li><strong>Tentang:</strong> Baca lebih jauh tentang visi dan tim Zentara.</li>
-        <li><strong>Bookmark:</strong> Simpan berita favorit Anda untuk dibaca kembali nanti.</li>
-      </ul>
+        {/* Navigation Guide */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <Home className="w-6 h-6 mr-2 text-blue-600" />
+            Navigasi Situs
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {navigationItems.map((item, index) => (
+              <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                <div className="flex items-center mb-3">
+                  <item.icon className="w-6 h-6 text-blue-600 mr-3" />
+                  <h3 className="font-semibold text-gray-800">{item.title}</h3>
+                </div>
+                <p className="text-gray-600 text-sm">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
 
-      <h2 className="text-xl font-semibold mt-6 mb-2">Fitur Tambahan</h2>
-      <ul className="list-disc list-inside mb-4">
-        <li><strong>Berbagi Artikel:</strong> Gunakan tombol share untuk membagikan berita ke sosial media Anda.</li>
-        <li><strong>Laporan:</strong> Temukan bug atau konten tidak pantas? Silakan hubungi kami melalui formulir kontak.</li>
-        <li><strong>Newsletter:</strong> Berlangganan untuk update berita langsung ke email Anda.</li>
-      </ul>
+        {/* Features */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <Share2 className="w-6 h-6 mr-2 text-purple-600" />
+            Fitur Tambahan
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {features.map((feature, index) => (
+              <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                <div className="flex items-center mb-3">
+                  <feature.icon className="w-6 h-6 text-purple-600 mr-3" />
+                  <h3 className="font-semibold text-gray-800">{feature.title}</h3>
+                </div>
+                <p className="text-gray-600 text-sm">{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
 
-      <h2 className="text-xl font-semibold mt-6 mb-2">Komunitas & Panduan</h2>
-      <p className="mb-4">
-        Kami ingin menciptakan komunitas pembaca yang sehat dan konstruktif. Silakan baca Panduan Komunitas kami
-        untuk menjaga etika dalam berdiskusi dan berkomentar.
-      </p>
+        {/* Community & Privacy */}
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-8 border border-blue-100">
+            <Users className="w-8 h-8 text-blue-600 mb-4" />
+            <h3 className="text-xl font-semibold text-gray-800 mb-3">Komunitas & Panduan</h3>
+            <p className="text-gray-600 mb-4">
+              Kami ingin menciptakan komunitas pembaca yang sehat dan konstruktif. Silakan baca Panduan Komunitas kami
+              untuk menjaga etika dalam berdiskusi dan berkomentar.
+            </p>
+          </div>
 
-      <h2 className="text-xl font-semibold mt-6 mb-2">Privasi & Ketentuan</h2>
-      <p>
-        Untuk mengetahui lebih lanjut tentang bagaimana kami mengelola data Anda, silakan kunjungi halaman
-        <a href="/kebijakan-privasi" className="text-blue-600 underline ml-1">Kebijakan Privasi</a>.
-      </p>
-    </div>
+          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-100">
+            <Shield className="w-8 h-8 text-purple-600 mb-4" />
+            <h3 className="text-xl font-semibold text-gray-800 mb-3">Privasi & Ketentuan</h3>
+            <p className="text-gray-600 mb-4">
+              Untuk mengetahui lebih lanjut tentang bagaimana kami mengelola data Anda, silakan kunjungi halaman Kebijakan Privasi kami.
+            </p>
+            <a 
+              href="/kebijakan-privasi" 
+              className="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium transition-colors duration-200"
+            >
+              Baca Kebijakan Privasi
+              <ArrowRight className="w-4 h-4 ml-1" />
+            </a>
+          </div>
+        </div>
+      </div>
     </ZentaraLayout>
   );
 };

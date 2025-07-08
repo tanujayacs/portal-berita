@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Autoplay from "embla-carousel-autoplay";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 
 import { NewsItem } from "@/types/news";
 import { getAllNews } from "@/services/api";
@@ -31,6 +31,9 @@ const shuffleArray = (array: NewsItem[]) => {
 const HeroSlider = () => {
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: true }));
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   const { data: sliderNews, isLoading } = useQuery({
     queryKey: ["heroSliderNews"],
@@ -39,46 +42,99 @@ const HeroSlider = () => {
     select: (data) => shuffleArray([...data]).slice(0, 5),
   });
 
+  useEffect(() => {
+    if (!carouselApi) return;
+
+    setCount(carouselApi.scrollSnapList().length);
+    setCurrent(carouselApi.selectedScrollSnap() + 1);
+
+    carouselApi.on("select", () => {
+      setCurrent(carouselApi.selectedScrollSnap() + 1);
+    });
+  }, [carouselApi]);
+
+  const toggleAutoplay = () => {
+    if (isPlaying) {
+      plugin.current.stop();
+    } else {
+      plugin.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
   if (isLoading) {
     return (
-      <div className="w-full h-[550px] bg-muted animate-pulse rounded-lg flex items-center justify-center">
-        <p className="text-muted-foreground">Memuat Berita Utama...</p>
+      <div className="relative w-full h-[600px] bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse rounded-2xl overflow-hidden">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 bg-gray-300 rounded-full mx-auto animate-spin"></div>
+            <p className="text-gray-500 text-lg font-medium">Memuat Berita Utama...</p>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full group">
       <Carousel
         plugins={[plugin.current]}
         opts={{ loop: true }}
         onMouseEnter={plugin.current.stop}
-        onMouseLeave={plugin.current.reset}
+        onMouseLeave={() => isPlaying && plugin.current.reset()}
         setApi={setCarouselApi}
-        className="rounded-lg"
+        className="rounded-2xl overflow-hidden shadow-2xl"
       >
         <CarouselContent>
-          {sliderNews?.map((news) => (
+          {sliderNews?.map((news, index) => (
             <CarouselItem key={news.id}>
               <Link to={`/berita/${news.slug}`} className="block">
-                <div className="relative w-full h-[550px]">
-                  <img
-                    src={`https://drive.google.com/thumbnail?id=${news.gambar}&sz=w1600`}
-                    alt={news.judul}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/40" />
+                <div className="relative w-full h-[600px] overflow-hidden">
+                  {/* Enhanced image with overlay effects */}
+                  <div className="absolute inset-0">
+                    <img
+                      src={`https://drive.google.com/thumbnail?id=${news.gambar}&sz=w1600`}
+                      alt={news.judul}
+                      className="w-full h-full object-cover transition-transform duration-[8s] ease-out hover:scale-110"
+                    />
+                    {/* Multi-layer overlay for better text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/20" />
+                  </div>
 
-                  <div className="relative h-full flex flex-col justify-end ml-8 p-8 md:p-12 text-white">
-                    <div className="max-w-3xl">
-                      
-                      <h1 className="text-3xl md:text-5xl font-bold leading-tight drop-shadow-lg hover:text-primary-foreground/90 transition-colors">
+                  {/* Enhanced content section */}
+                  <div className="relative h-full flex flex-col justify-end p-8 md:p-12 text-white">
+                    <div className="max-w-4xl space-y-6">
+                      {/* Category badge */}
+                      <div className="flex items-center gap-3">
+                        <div className="bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-2 rounded-full">
+                          <span className="text-sm font-bold uppercase tracking-wide">
+                            {news.kategori}
+                          </span>
+                        </div>
+                        <div className="h-1 w-12 bg-white/30 rounded-full"></div>
+                      </div>
+
+                      {/* Enhanced title */}
+                      <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight drop-shadow-2xl hover:text-blue-200 transition-colors duration-300">
                         {news.judul}
                       </h1>
-                      <p className="mt-4 text-base text-gray-200 drop-shadow-md">
-                        <span className="font-semibold">{news.kategori } •  
-                          </span> Oleh <span className="font-semibold">{news.penulis}</span>
-                      </p>
+
+                      {/* Enhanced author info */}
+                      <div className="flex items-center gap-4 text-base">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                          <span className="font-semibold">By {news.penulis}</span>
+                        </div>
+                        <div className="w-1 h-1 bg-white/50 rounded-full"></div>
+                        <span className="text-gray-200">
+                          {new Date(news.created_at).toLocaleDateString('id-ID', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -88,26 +144,74 @@ const HeroSlider = () => {
         </CarouselContent>
       </Carousel>
 
-      {/* Navigation Buttons */}
-      <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
+      {/* Enhanced Navigation Controls */}
+      <div className="absolute left-6 top-1/2 -translate-y-1/2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <Button
           variant="outline"
           size="icon"
-          className="rounded-full bg-background/20 hover:bg-background/40 text-white"
+          className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-white/30 hover:border-white/50 transition-all duration-300 shadow-lg"
           onClick={() => carouselApi?.scrollPrev()}
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-6 w-6" />
         </Button>
       </div>
-      <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
+      
+      <div className="absolute right-6 top-1/2 -translate-y-1/2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <Button
           variant="outline"
           size="icon"
-          className="rounded-full bg-background/20 hover:bg-background/40 text-white"
+          className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-white/30 hover:border-white/50 transition-all duration-300 shadow-lg"
           onClick={() => carouselApi?.scrollNext()}
         >
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-6 w-6" />
         </Button>
+      </div>
+
+      {/* Enhanced slide indicators */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
+        <div className="flex items-center gap-4 bg-black/20 backdrop-blur-sm rounded-full px-6 py-3">
+          {/* Slide dots */}
+          <div className="flex gap-2">
+            {Array.from({ length: count }).map((_, index) => (
+              <button
+                key={index}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === current - 1 
+                    ? 'bg-white scale-125' 
+                    : 'bg-white/50 hover:bg-white/75'
+                }`}
+                onClick={() => carouselApi?.scrollTo(index)}
+              />
+            ))}
+          </div>
+          
+          {/* Slide counter */}
+          <div className="text-white text-sm font-medium">
+            {current} / {count}
+          </div>
+          
+          {/* Play/Pause button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleAutoplay}
+            className="w-8 h-8 text-white hover:bg-white/20 rounded-full"
+          >
+            {isPlaying ? (
+              <Pause className="h-4 w-4" />
+            ) : (
+              <Play className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
+      </div>
+
+      {/* Progress bar */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+        <div 
+          className="h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300"
+          style={{ width: `${((current - 1) / (count - 1)) * 100}%` }}
+        />
       </div>
     </div>
   );
