@@ -52,7 +52,7 @@ const Navbar = () => {
         {/* Left: Logo */}
         <div className="flex items-center gap-2">
           <img
-            src="/assets/logo.png"
+            src="/public/logo.png"
             alt="Logo"
             className="h-6 w-auto cursor-pointer"
             onClick={() => navigate("/")}
@@ -110,7 +110,7 @@ const Navbar = () => {
       <div className="md:hidden flex justify-between items-center">
         <div className="flex items-center gap-2 ml-3">
           <img
-            src="/assets/logo.png"
+            src="/public/logo.png"
             alt="Logo"
             className="h-6 w-auto cursor-pointer"
             onClick={() => navigate("/")}
