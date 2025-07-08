@@ -73,7 +73,7 @@ const Footer = () => {
                     <div className="lg:col-span-4">
                         <div className="flex items-center gap-3 mb-6">
                             <img
-                                src="=/zentara.png"
+                                src="/zentara.png"
                                 alt="Zentara Logo"
                                 className="w-12 h-12 object-cover rounded-xl"
                             />
