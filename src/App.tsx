@@ -1,16 +1,16 @@
 import { BrowserRouter, Routes, Route, ScrollRestoration } from "react-router-dom";
-import Home from "@/pages/Home";
-import DetailPage from "@/pages/DetailPage";
-import KategoriPage from "@/pages/KategoriPage";
-import SearchResultPage from "@/pages/SearchResultPage";
-import NotFound from "@/pages/NotFound";
-import BookmarkPage from "@/pages/BookmarkPage";
-import BantuanPage from "@/pages/BantuanPage";
-import FAQPage from "@/pages/FAQPage";
-import KebijakanPrivasiPage from "@/pages/KebijakanPrivasiPage";
-import KontakPage from "@/pages/KontakPage";
-import PanduanKomunitasPage from "@/pages/PanduanKomunitasPage";
-import TentangPage from "@/pages/TentangPage";
+import Home from "@/pages/dynamic/Home";
+import DetailPage from "@/pages/dynamic/DetailPage";
+import KategoriPage from "@/pages/dynamic/KategoriPage";
+import SearchResultPage from "@/pages/dynamic/SearchResultPage";
+import NotFound from "@/pages/static/NotFound";
+import BookmarkPage from "@/pages/dynamic/BookmarkPage";
+import BantuanPage from "@/pages/static/BantuanPage";
+import FAQPage from "@/pages/static/FAQPage";
+import KebijakanPrivasiPage from "@/pages/static/KebijakanPrivasiPage";
+import KontakPage from "@/pages/static/KontakPage";
+import PanduanKomunitasPage from "@/pages/static/PanduanKomunitasPage";
+import TentangPage from "@/pages/static/TentangPage";
 
 
 function App() {
