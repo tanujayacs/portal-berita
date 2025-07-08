@@ -62,9 +62,11 @@ const Navbar = () => {
             className="flex items-center gap-2 cursor-pointer group"
             onClick={() => navigate("/")}
           >
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
-              <span className="text-white font-bold text-lg">Z</span>
-            </div>
+            <img
+              src="/assets/zentara.png"
+              alt="Zentara Logo"
+              className="w-8 h-8 object-cover rounded-lg cursor-pointer group-hover:scale-105 transition-transform duration-200"
+            />
             <span className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-200">
               Zentara
             </span>
@@ -187,8 +189,8 @@ const Navbar = () => {
                     key={cat}
                     onClick={() => handleCategoryClick(cat)}
                     className={`w-full text-left px-4 py-3 rounded-lg capitalize transition-all duration-200 ${isActive
-                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
-                        : "hover:bg-gray-100"
+                      ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+                      : "hover:bg-gray-100"
                       }`}
                   >
                     {cat}

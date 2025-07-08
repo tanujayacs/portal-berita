@@ -160,7 +160,7 @@ const DetailPage = () => {
             <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-12 lg:px-20">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src={`https://drive.google.com/thumbnail?id=${news.gambar}`}
+                  src={getOptimizedDriveThumbnail(news.gambar)}
                   alt={news.judul}
                   className="w-full h-auto max-h-[600px] object-cover"
                 />

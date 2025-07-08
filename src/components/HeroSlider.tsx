@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import { getOptimizedDriveThumbnail } from "@/lib/utils";
 
 import { NewsItem } from "@/types/news";
 import { getAllNews } from "@/services/api";
@@ -93,7 +94,7 @@ const HeroSlider = () => {
                   {/* Enhanced image with overlay effects */}
                   <div className="absolute inset-0">
                     <img
-                      src={`https://drive.google.com/thumbnail?id=${news.gambar}&sz=w1600`}
+                      src={getOptimizedDriveThumbnail(news.gambar)}
                       alt={news.judul}
                       className="w-full h-full object-cover transition-transform duration-[8s] ease-out hover:scale-110"
                     />

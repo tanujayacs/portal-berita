@@ -72,9 +72,11 @@ const Footer = () => {
                     {/* Brand Section */}
                     <div className="lg:col-span-4">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-                                <span className="text-white font-bold text-2xl">Z</span>
-                            </div>
+                            <img
+                                src="/assets/zentara.png"
+                                alt="Zentara Logo"
+                                className="w-12 h-12 object-cover rounded-xl"
+                            />
                             <div>
                                 <h3 className="text-2xl font-bold">Zentara</h3>
                                 <p className="text-gray-500 text-sm">Portal Berita Digital</p>

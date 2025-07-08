@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { getAllNews } from "@/services/api";
 import { NewsItem } from "@/types/news";
 import { ArrowRight, Clock, User } from "lucide-react";
+import { getOptimizedDriveThumbnail } from "@/lib/utils";
 
 interface Props {
   title: string;
@@ -149,7 +150,7 @@ const CategorySection = ({ title, kategori, highlightFirst = true }: Props) => {
                         >
                           <div className="relative flex-shrink-0">
                             <img
-                              src={`https://drive.google.com/thumbnail?id=${news.gambar}`}
+                              src={getOptimizedDriveThumbnail(news.gambar)}
                               alt={news.judul}
                               className="w-28 h-28 object-cover transition-transform duration-300 group-hover:scale-105"
                             />
