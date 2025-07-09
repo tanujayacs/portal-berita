@@ -42,10 +42,10 @@ const Footer = () => {
     ];
 
     const socialLinks = [
-        { icon: Facebook, name: "Facebook", url: "https://facebook.com/zentara" },
-        { icon: Twitter, name: "Twitter", url: "https://twitter.com/zentara" },
-        { icon: Instagram, name: "Instagram", url: "https://instagram.com/zentara" },
-        { icon: Youtube, name: "YouTube", url: "https://youtube.com/zentara" },
+        { icon: Facebook, name: "Facebook", url: "#" },
+        { icon: Twitter, name: "Twitter", url: "#" },
+        { icon: Instagram, name: "Instagram", url: "#" },
+        { icon: Youtube, name: "YouTube", url: "#" },
     ];
 
     const contactInfo = [

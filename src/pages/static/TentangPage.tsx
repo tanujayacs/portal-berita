@@ -22,8 +22,10 @@ const TentangPage = () => {
       <div className="max-w-6xl mx-auto py-12 px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-6">
-            <span className="text-white font-bold text-2xl">Z</span>
+          <div className="inline-flex items-center justify-center w-20 h-20 mb-1">
+            <img
+              src="/zentara.png"
+              alt="Zentara Logo"/>
           </div>
           <h1 className="text-4xl font-bold text-gray-800 mb-4">Tentang Zentara</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
