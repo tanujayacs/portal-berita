@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { NewsItem } from "@/types/news";
@@ -6,116 +6,67 @@ import { getAllNews } from "@/services/api";
 import ZentaraLayout from "@/layout/ZentaraLayout";
 import NewsCard from "@/components/NewsCard";
 import { getOptimizedDriveThumbnail } from "@/lib/utils";
-import { getTopKRecommendations } from "@/utils/tfidf";
-import { Clock, User, Tag, ArrowLeft, BookOpen, Sparkles, TrendingUp } from "lucide-react";
-
-const DetailPageSkeleton = () => (
-  <ZentaraLayout>
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="animate-pulse">
-        <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 py-8 text-center">
-          <div className="h-10 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
-          <div className="flex justify-center space-x-4">
-            <div className="h-4 bg-gray-200 rounded w-24"></div>
-            <div className="h-4 bg-gray-200 rounded w-32"></div>
-          </div>
-        </div>
-
-        <div className="w-full h-64 md:h-96 bg-gray-200"></div>
-
-        <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-            {/* Content */}
-            <div className="lg:col-span-8 space-y-4">
-              {[...Array(100)].map((_, i) => (
-                <div key={i} className="h-4 bg-gray-200 rounded w-full"></div>
-              ))}
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            </div>
-
-            {/* Writer Sidebar */}
-            <div className="lg:col-span-4 space-y-4">
-              <div className="h-6 bg-gray-200 rounded w-1/2 mb-4"></div>
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="border rounded-md p-3">
-                  <div className="h-32 bg-gray-200 rounded mb-3"></div>
-                  <div className="h-4 bg-gray-200 rounded w-full"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* News Reccomendation */}
-          <div className="mt-12">
-            <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="border rounded-lg overflow-hidden">
-                  <div className="h-48 bg-gray-200"></div>
-                  <div className="p-4">
-                    <div className="h-5 bg-gray-200 rounded w-full mb-2"></div>
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </ZentaraLayout>
-);
+import { getTopKRecommendationsHybrid } from "@/utils/tfidf";
+import {
+  Clock,
+  User,
+  Tag,
+  ArrowLeft,
+  BookOpen,
+  Sparkles,
+  TrendingUp,
+} from "lucide-react";
 
 const DetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const searchQuery = searchParams.get("q") || "";
+
   const [recommendedNews, setRecommendedNews] = useState<NewsItem[]>([]);
 
-  const { data: allNews, isLoading: loadingAll } = useQuery<NewsItem[], Error>({
-    queryKey: ['allNews'],
+  const { data: allNews, isLoading } = useQuery<NewsItem[]>({
+    queryKey: ["allNews"],
     queryFn: getAllNews,
   });
 
-  const news = allNews?.find((n: NewsItem) => n.slug === slug);
+  const news = allNews?.find((n) => n.slug === slug);
 
   useEffect(() => {
     if (!news || !allNews) return;
-    const index = allNews.findIndex(n => n.id === news.id);
-    const top3 = getTopKRecommendations(index, allNews, 3);
-    const matched = top3
-      .map(sim => allNews.find(n => n.id === sim.id))
-      .filter(Boolean) as NewsItem[];
-    setRecommendedNews(matched);
-  }, [news, allNews]);
 
-  // Get category color based on category name
+    const index = allNews.findIndex((n) => n.id === news.id);
+    const top = getTopKRecommendationsHybrid(index, allNews, 3, searchQuery);
+    const matched = top
+      .map((sim) => allNews.find((n) => n.id === sim.id))
+      .filter(Boolean) as NewsItem[];
+
+    setRecommendedNews(matched);
+  }, [news, allNews, searchQuery]);
+
   const getCategoryColor = (category: string) => {
     const colors = {
-      'default': 'from-blue-600 to-purple-600'
+      default: "from-blue-600 to-purple-600",
     };
     return colors[category?.toLowerCase() as keyof typeof colors] || colors.default;
   };
 
-  if (loadingAll) {
-    return <DetailPageSkeleton />;
-  }
+  if (isLoading) return <p className="text-center py-10">Loading...</p>;
 
   if (!news) {
     return (
       <ZentaraLayout>
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-          <div className="min-h-[60vh] flex items-center justify-center">
-            <div className="text-center bg-white rounded-2xl shadow-xl p-8 max-w-md mx-4">
-              <div className="text-red-500 mb-4">❌</div>
-              <h2 className="text-2xl font-bold text-red-600 mb-2">404 - Berita Tidak Ditemukan</h2>
-              <p className="text-gray-500 mb-6">Maaf, berita yang Anda cari tidak ada atau URL-nya salah.</p>
-              <Link 
-                to="/" 
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Kembali ke Beranda
-              </Link>
-            </div>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center p-8 bg-white rounded-2xl shadow-xl max-w-md">
+            <h2 className="text-xl font-bold text-red-600 mb-2">404 - Berita Tidak Ditemukan</h2>
+            <p className="text-gray-500 mb-6">URL tidak valid atau berita telah dihapus.</p>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-full"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Kembali ke Beranda
+            </Link>
           </div>
         </div>
       </ZentaraLayout>
@@ -125,7 +76,7 @@ const DetailPage = () => {
   return (
     <ZentaraLayout>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        {/* Header Section */}
+        {/* Header */}
         <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 py-8">
           <div className="max-w-4xl mx-auto text-center">
             <div className="mb-6">
@@ -152,19 +103,14 @@ const DetailPage = () => {
           </div>
         </div>
 
-        {/* Main Image */}
+        {/* Image */}
         {news.gambar && (
-          <div className="w-full mb-8">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-12 lg:px-20">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                <img
-                  src={getOptimizedDriveThumbnail(news.gambar)}
-                  alt={news.judul}
-                  className="w-full h-auto max-h-[600px] object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
-              </div>
-            </div>
+          <div className="w-full px-4 md:px-12 lg:px-20 mb-8">
+            <img
+              src={getOptimizedDriveThumbnail(news.gambar)}
+              alt={news.judul}
+              className="rounded-2xl w-full max-h-[600px] object-cover shadow-xl"
+            />
           </div>
         )}
 
@@ -181,9 +127,9 @@ const DetailPage = () => {
                       <span className="text-gray-700 font-medium">Artikel Lengkap</span>
                     </div>
                   </div>
-                  
+
                   <div
-                    className="prose prose-lg max-w-none text-base/7 tracking-wide text-gray-700"
+                    className="prose prose-lg max-w-none text-base/7 tracking-wide text-gray-700 font-medium"
                     dangerouslySetInnerHTML={{ __html: news.deskripsi }}
                   />
                 </article>
@@ -196,7 +142,7 @@ const DetailPage = () => {
                         Artikel Lain oleh {news.penulis}
                       </h3>
                     </div>
-                    
+
                     <div className="space-y-4">
                       {allNews && allNews.filter(n => n.penulis === news.penulis && n.slug !== slug).length > 0 ? (
                         allNews.filter(n => n.penulis === news.penulis && n.slug !== slug).slice(0, 3).map(item => (
@@ -235,45 +181,42 @@ const DetailPage = () => {
           </div>
         </div>
 
-        {/* Recommendations Section */}
+        {/* Recommendations */}
         {recommendedNews.length > 0 && (
-          <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 py-8">
-            <div className="max-w-7xl mx-auto">
-              <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
-                <div className="text-center mb-8">
-                  <div className="flex justify-center items-center gap-3 mb-4">
-                    <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full">
-                      <Sparkles className="w-6 h-6 text-white" />
-                    </div>
-                    <h2 className="text-2xl font-bold text-gray-800">
-                      Rekomendasi untuk Anda
-                    </h2>
+          <div className="px-4 md:px-12 lg:px-20 py-10">
+            <div className="bg-white p-6 md:p-8 rounded-2xl shadow-xl max-w-7xl mx-auto">
+              <div className="mb-6 text-center">
+                <div className="flex justify-center items-center gap-3 mb-2">
+                  <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full">
+                    <Sparkles className="w-6 h-6 text-white" />
                   </div>
-                  <p className="text-gray-600">
-                    Berita serupa yang mungkin Anda sukai
-                  </p>
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-800">
+                    Rekomendasi untuk Anda
+                  </h2>
                 </div>
+                <p className="text-gray-600 text-sm">
+                  Berita serupa yang mungkin Anda sukai
+                </p>
+              </div>
 
-                {/* Stats Bar */}
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mb-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />
-                      <span className="text-gray-700 font-medium">
-                        Dipilih khusus berdasarkan konten yang Anda baca
-                      </span>
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {recommendedNews.length} rekomendasi berita
-                    </div>
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mb-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-blue-600" />
+                    <span className="text-sm text-gray-700 font-medium">
+                      Dipilih khusus berdasarkan konten yang Anda baca
+                    </span>
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {recommendedNews.length} rekomendasi berita
                   </div>
                 </div>
+              </div>
 
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {recommendedNews.map(item => (
-                    <NewsCard key={item.id} news={item} />
-                  ))}
-                </div>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {recommendedNews.map((item) => (
+                  <NewsCard key={item.id} news={item} />
+                ))}
               </div>
             </div>
           </div>

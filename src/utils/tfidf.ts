@@ -1,3 +1,5 @@
+// tfidf.ts (HYBRID RECOMMENDATION VERSION)
+
 export function normalize(text: string): string[] {
   return text
     .toLowerCase()
@@ -6,7 +8,6 @@ export function normalize(text: string): string[] {
     .filter(Boolean);
 }
 
-// 2. Hitung TF (Term Frequency)
 function termFrequency(tokens: string[]): Record<string, number> {
   const tf: Record<string, number> = {};
   tokens.forEach(token => {
@@ -19,7 +20,6 @@ function termFrequency(tokens: string[]): Record<string, number> {
   return tf;
 }
 
-// 3. Hitung IDF (Inverse Document Frequency)
 function inverseDocumentFrequency(docs: string[][]): Record<string, number> {
   const idf: Record<string, number> = {};
   const totalDocs = docs.length;
@@ -42,7 +42,6 @@ function inverseDocumentFrequency(docs: string[][]): Record<string, number> {
   return idf;
 }
 
-// 4. Hitung TF-IDF Vector
 function computeTfIdf(tokens: string[], idf: Record<string, number>): Record<string, number> {
   const tf = termFrequency(tokens);
   const tfidf: Record<string, number> = {};
@@ -52,7 +51,6 @@ function computeTfIdf(tokens: string[], idf: Record<string, number>): Record<str
   return tfidf;
 }
 
-// 5. Cosine Similarity antar dua vektor
 function cosineSimilarity(a: Record<string, number>, b: Record<string, number>): number {
   const allTokens = new Set([...Object.keys(a), ...Object.keys(b)]);
   let dot = 0, normA = 0, normB = 0;
@@ -69,28 +67,40 @@ function cosineSimilarity(a: Record<string, number>, b: Record<string, number>):
   return dot / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
-// 6. Fungsi utama: rekomendasi berita mirip
-export function getTopKRecommendations(
+// HYBRID RECOMMENDATION SYSTEM
+export function getTopKRecommendationsHybrid(
   inputIndex: number,
-  articles: { id: string; judul: string; deskripsi: string }[],
-  topK = 3
+  articles: { id: string; judul: string; deskripsi: string; kategori: string }[],
+  topK = 3,
+  searchQuery: string = ''
 ): { id: string; judul: string; similarity: number }[] {
   const docs = articles.map(article => normalize(`${article.judul} ${article.deskripsi}`));
   const idf = inverseDocumentFrequency(docs);
   const tfidfVectors = docs.map(doc => computeTfIdf(doc, idf));
 
   const inputVec = tfidfVectors[inputIndex];
+  const inputCategory = articles[inputIndex].kategori.toLowerCase();
+  const searchTokens = normalize(searchQuery);
+
   const scores = tfidfVectors.map((vec, i) => {
+    const contentScore = cosineSimilarity(inputVec, vec);
+    const isSameCategory = articles[i].kategori.toLowerCase() === inputCategory;
+    const categoryBoost = isSameCategory ? 0.15 : 0;
+
+    const keywordScore = searchTokens.length > 0 ? searchTokens.reduce((acc, word) => {
+      return acc + (articles[i].judul.toLowerCase().includes(word) ? 0.05 : 0);
+    }, 0) : 0;
+
     return {
       id: articles[i].id,
       judul: articles[i].judul,
-      similarity: cosineSimilarity(inputVec, vec),
+      similarity: contentScore + categoryBoost + keywordScore,
     };
   });
 
   return scores
     .filter((_, i) => i !== inputIndex)
     .sort((a, b) => b.similarity - a.similarity)
-    .filter(item => item.similarity >= 0.4) // kamu bisa adjust threshold ini
+    .filter(item => item.similarity >= 0.2)
     .slice(0, topK);
 }
