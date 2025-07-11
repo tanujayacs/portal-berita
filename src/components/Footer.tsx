@@ -5,6 +5,11 @@ import {
     Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin, ArrowUp, ExternalLink
 } from "lucide-react";
 
+// Helper function untuk membuat slug konsisten (sama dengan di Navbar & KategoriPage)
+const createSlug = (text: string) => {
+    return text.toLowerCase().replace(/\s+/g, '-');
+};
+
 const Footer = () => {
     const [categories, setCategories] = useState<string[]>([]);
     const [showScrollTop, setShowScrollTop] = useState(false);
@@ -15,7 +20,7 @@ const Footer = () => {
             try {
                 const data = await getAllNews();
                 const uniqueCats = Array.from(
-                    new Set(data.map((item) => item.kategori.trim().toLowerCase()).filter(Boolean))
+                    new Set(data.map((item) => item.kategori.trim()).filter(Boolean))
                 );
                 setCategories(uniqueCats.slice(0, 30));
             } catch (error) {
@@ -116,16 +121,19 @@ const Footer = () => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {columns.map((col, index) => (
                                 <ul key={index} className="space-y-3">
-                                    {col.map((cat) => (
-                                        <li key={cat}>
-                                            <Link
-                                                to={`/kategori/${cat.toLowerCase()}`}
-                                                className="text-gray-600 hover:text-blue-600 capitalize text-sm"
-                                            >
-                                                {cat}
-                                            </Link>
-                                        </li>
-                                    ))}
+                                    {col.map((cat) => {
+                                        const slug = createSlug(cat);
+                                        return (
+                                            <li key={cat}>
+                                                <Link
+                                                    to={`/kategori/${slug}`}
+                                                    className="text-gray-600 hover:text-blue-600 capitalize text-sm transition-colors duration-200"
+                                                >
+                                                    {cat}
+                                                </Link>
+                                            </li>
+                                        );
+                                    })}
                                 </ul>
                             ))}
                         </div>
@@ -139,7 +147,7 @@ const Footer = () => {
                                 <li key={link.name}>
                                     <Link
                                         to={link.path}
-                                        className="text-gray-600 hover:text-blue-600 text-sm flex items-center group"
+                                        className="text-gray-600 hover:text-blue-600 text-sm flex items-center group transition-colors duration-200"
                                     >
                                         <ExternalLink className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                                         {link.name}
