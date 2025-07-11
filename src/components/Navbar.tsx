@@ -4,6 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Menu, X, Bookmark, Search, ChevronDown } from "lucide-react";
 import { getAllNews } from "@/services/api";
 
+// Helper function untuk membuat slug konsisten
+const createSlug = (text: string) => {
+  return text.toLowerCase().replace(/\s+/g, '-');
+};
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -17,7 +22,7 @@ const Navbar = () => {
     queryFn: async () => {
       const data = await getAllNews();
       const uniqueCats = Array.from(
-        new Set(data.map((item) => item.kategori.trim().toLowerCase()).filter(Boolean))
+        new Set(data.map((item) => item.kategori.trim()).filter(Boolean))
       );
       return uniqueCats;
     },
@@ -27,7 +32,7 @@ const Navbar = () => {
   useEffect(() => {
     const match = location.pathname.match(/\/kategori\/(.+)/);
     if (match) {
-      setActiveCategory(match[1]);
+      setActiveCategory(decodeURIComponent(match[1]));
     } else {
       setActiveCategory(null);
     }
@@ -48,7 +53,8 @@ const Navbar = () => {
   };
 
   const handleCategoryClick = (cat: string) => {
-    navigate(`/kategori/${cat.toLowerCase()}`);
+    const slug = createSlug(cat);
+    navigate(`/kategori/${slug}`);
     setIsOpen(false);
   };
 
@@ -77,7 +83,7 @@ const Navbar = () => {
         <div className="flex-1 mx-8 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
           <div className="flex gap-2 w-max py-2">
             {categories.map((cat) => {
-              const slug = cat.toLowerCase();
+              const slug = createSlug(cat);
               const isActive = activeCategory === slug;
 
               return (
@@ -181,7 +187,7 @@ const Navbar = () => {
             <div className="space-y-2 max-h-60 overflow-y-auto">
               <div className="text-sm font-medium text-gray-500 px-2 py-1">Kategori</div>
               {categories.map((cat) => {
-                const slug = cat.toLowerCase();
+                const slug = createSlug(cat);
                 const isActive = activeCategory === slug;
 
                 return (

@@ -6,14 +6,30 @@ import NewsCard from "@/components/NewsCard";
 import ZentaraLayout from "@/layout/ZentaraLayout";
 import { Tag, FileText, Clock, TrendingUp } from "lucide-react";
 
+// Helper function untuk membuat slug konsisten
+const createSlug = (text: string) => {
+  return text.toLowerCase().replace(/\s+/g, '-');
+};
+
+// Helper function untuk mengubah slug kembali ke format asli
+const formatCategoryDisplay = (slug: string) => {
+  return slug.replace(/-/g, ' ');
+};
+
 const KategoriPage = () => {
   const { kategori = "" } = useParams<{ kategori: string }>();
+  
+  // Ubah slug kembali ke format untuk pencarian
+  const categoryForSearch = formatCategoryDisplay(kategori);
 
   const { data: filteredNews, isLoading, isError } = useQuery<NewsItem[], Error, NewsItem[]>({
     queryKey: ['allNews'],
     queryFn: getAllNews,
     select: (allNews) =>
-      allNews.filter((item) => item.kategori.toLowerCase() === kategori.toLowerCase())
+      allNews.filter((item) => {
+        const itemSlug = createSlug(item.kategori.trim());
+        return itemSlug === kategori;
+      })
   });
 
   const getCategoryColor = (category: string) => {
@@ -34,11 +50,11 @@ const KategoriPage = () => {
                 <Tag className="w-6 h-6 text-white" />
               </div>
               <h1 className="text-3xl font-bold text-gray-800 capitalize">
-                {kategori}
+                {categoryForSearch}
               </h1>
             </div>
             <p className="text-lg text-gray-600 mb-2">
-              Berita terkini dalam kategori <span className="font-semibold text-blue-600 capitalize">{kategori}</span>
+              Berita terkini dalam kategori <span className="font-semibold text-blue-600 capitalize">{categoryForSearch}</span>
             </p>
             {filteredNews && (
               <p className="text-sm text-gray-500 flex items-center justify-center gap-2">
@@ -74,7 +90,7 @@ const KategoriPage = () => {
                     Tidak ada berita di kategori ini
                   </h3>
                   <p className="text-gray-500 text-sm">
-                    Belum ada berita yang dipublikasikan dalam kategori <span className="font-medium capitalize">{kategori}</span>
+                    Belum ada berita yang dipublikasikan dalam kategori <span className="font-medium capitalize">{categoryForSearch}</span>
                   </p>
                 </div>
               </div>
@@ -86,7 +102,7 @@ const KategoriPage = () => {
                     <div className="flex items-center gap-2">
                       <TrendingUp className="w-5 h-5 text-blue-600" />
                       <span className="text-gray-700 font-medium">
-                        Kategori: <span className="capitalize">{kategori}</span>
+                        Kategori: <span className="capitalize">{categoryForSearch}</span>
                       </span>
                     </div>
                     <div className="text-sm text-gray-500">
