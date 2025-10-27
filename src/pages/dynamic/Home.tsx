@@ -26,7 +26,29 @@ const Home = () => {
     fetchNews();
   }, []);
 
-  if (loading) return <p className="text-center mt-10">Loading berita...</p>;
+  if (loading)
+  return (
+    <ZentaraLayout>
+      <main className="px-6 md:px-20 py-16">
+        <h2 className="text-2xl md:text-3xl font-bold mb-8 text-gray-700">
+          Memuat Berita...
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-pulse">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div
+              key={i}
+              className="bg-white rounded-2xl shadow p-4 space-y-3 border border-gray-100"
+            >
+              <div className="w-full h-48 bg-gray-200 rounded-lg" />
+              <div className="h-4 bg-gray-200 rounded w-3/4" />
+              <div className="h-3 bg-gray-200 rounded w-1/2" />
+            </div>
+          ))}
+        </div>
+      </main>
+    </ZentaraLayout>
+  );
+
 
   const categorizedMap: Record<string, NewsItem[]> = {};
   newsList.forEach((item) => {
