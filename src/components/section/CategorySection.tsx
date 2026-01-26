@@ -1,9 +1,10 @@
+// âž¡ï¸ portal-berita/src/components/section/CategorySection.tsx
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
 import { getAllNews } from "@/services/api";
 import { NewsItem } from "@/types/news";
 import { ArrowRight, Clock, User } from "lucide-react";
-import { getOptimizedDriveThumbnail } from "@/lib/utils";
+import { getOptimizedDriveThumbnail } from "@/lib/utils"; // âœ… SUDAH PAKAI HELPER FUNCTION
 
 interface Props {
   title: string;
@@ -79,12 +80,12 @@ const CategorySection = ({ title, kategori, highlightFirst = true }: Props) => {
                 to={`/berita/${featured.slug}`} 
                 className="group block relative rounded-2xl overflow-hidden h-[450px] shadow-2xl hover:shadow-3xl transition-all duration-500"
               >
-                <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110"
-                  style={{
-                    backgroundImage: `url(https://drive.google.com/thumbnail?id=${featured.gambar})`,
-                  }}
-                ></div>
+                {/* âœ… GANTI BACKGROUND IMAGE DENGAN IMG TAG */}
+                <img
+                  src={getOptimizedDriveThumbnail(featured.gambar)}
+                  alt={featured.judul}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                 
                 <div className="absolute top-6 left-6 z-10">
@@ -137,7 +138,7 @@ const CategorySection = ({ title, kategori, highlightFirst = true }: Props) => {
                     </div>
                   ) : (
                     <div className="space-y-3">
-                      {others.map((news, index) => (
+                      {others.map((news) => (
                         <Link 
                           to={`/berita/${news.slug}`} 
                           key={news.id} 
