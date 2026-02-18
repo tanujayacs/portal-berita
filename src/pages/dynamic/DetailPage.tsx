@@ -85,11 +85,11 @@ const DetailPage = () => {
                 {news.kategori.toUpperCase()}
               </span>
             </div>
-            
+
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-gray-800 mb-6">
               {news.judul}
             </h1>
-            
+
             <div className="flex flex-wrap justify-center items-center gap-4 text-gray-600">
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4" />
@@ -97,7 +97,13 @@ const DetailPage = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                <span>Dipublikasikan hari ini</span>
+                <span>
+                  {new Date(news.created_at).toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  })}
+                </span>
               </div>
             </div>
           </div>
